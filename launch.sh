@@ -12,16 +12,17 @@ CLIENT_ADDR="ubuntu@ec2-13-57-229-155.us-west-1.compute.amazonaws.com"
 # Launch task servers.
 for i in "${TASK_ADDRS[@]}"
 do
-    cat launch-scripts/task.sh | ssh $i &
+    cat launch-scripts/task.sh | ssh $i > /dev/null 2>&1 &
 done
 
 # Launch assigner.
-cat launch-scripts/assigner.sh | ssh $ASSIGNER_ADDR &
+cat launch-scripts/assigner.sh | ssh $ASSIGNER_ADDR > /dev/null 2>&1 &
 
 # Launch distributor.
-cat launch-scripts/distributor.sh | ssh $DISTRIBUTOR_ADDR &
+cat launch-scripts/distributor.sh | ssh $DISTRIBUTOR_ADDR > /dev/null 2>&1 &
 
 # Launch client.
-cat launch-scripts/client.sh | ssh $CLIENT_ADDR &
+cat launch-scripts/client.sh | ssh $CLIENT_ADDR > /dev/null 2>&1 &
 
 wait
+echo "Successfully (re)launched slicer."
