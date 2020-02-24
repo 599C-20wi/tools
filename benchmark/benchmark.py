@@ -2,6 +2,11 @@ import mysql.connector
 import os
 import matplotlib.pyplot as plt
 import sys
+import time
+import socket
+
+CLIENT_HOST = "ec2-52-9-194-232.us-west-1.compute.amazonaws.com"
+CLIENT_PORT = 3001
 
 # Returns a connection to the Slicer db
 def connect_db():
@@ -12,6 +17,12 @@ def connect_db():
         database="slicer"
     )
 
+
+# Send admin message to server with int representing distribution.
+def send_distribution(distribution):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((CLIENT_HOST, CLIENT_PORT))
+        s.sendall("{}\n".format(distribution).encode())
 
 # Returns the last n seconds of load for task.
 def get_task_load(db, task, n):
@@ -29,7 +40,17 @@ def run_benchmark(name, duration):
     # Connect to slicer db for monitoring metrics
     db = connect_db()
 
-    # TODO: Setup experiment (send admin messages)
+    # Run first half of benchmark w/o changing distribution.
+    time.sleep(duration / 2)
+
+    # Send admin message to change distribution on client.
+    send_distribution(10)
+
+    # TODO: Consider sleeping for a little longer here to allow for the client to recieve/process the admin
+    # message.
+
+    # Run second half of benchmark w/ updated distribution.
+    time.sleep(duration / 2)
 
     # Grab load from all tasks.
     task1_load = get_task_load(db, "task1", duration)
@@ -53,4 +74,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("usage: python3 benchmark.py <sharding strategy> duration")
         sys.exit(1)
-    run_benchmark(sys.argv[1], sys.argv[2])
+    run_benchmark(sys.argv[1], int(sys.argv[2]))
