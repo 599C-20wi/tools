@@ -5,7 +5,8 @@ import sys
 import time
 import socket
 
-CLIENT_HOST = "ec2-52-9-194-232.us-west-1.compute.amazonaws.com"
+# CLIENT_HOST = "ec2-52-9-194-232.us-west-1.compute.amazonaws.com"
+CLIENT_HOST = "localhost"
 CLIENT_PORT = 3001
 
 # Returns a connection to the Slicer db
@@ -62,7 +63,7 @@ def run_benchmark(name, duration):
     plt.plot(task2_load, label="task 2", linestyle='dotted')
     plt.plot(task3_load, label="task 3", linestyle='dashed')
     plt.xlabel("Time Elapsed (seconds)")
-    plt.ylabel("# of Requests Recieved")
+    plt.ylabel("# of Requests Recieved (requests/sec)")
     plt.title("Task Load ({})".format(name))
     plt.legend()
 
