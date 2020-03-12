@@ -1,4 +1,4 @@
 killall task
 cd task
 git pull
-cargo run
+cargo run ${TASK_NAME}

@@ -1,4 +1,4 @@
 killall client
 cd client
 git pull
-cargo run
+cargo run --release
