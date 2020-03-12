@@ -5,8 +5,7 @@ import sys
 import time
 import socket
 
-# CLIENT_HOST = "ec2-52-9-194-232.us-west-1.compute.amazonaws.com"
-CLIENT_HOST = "localhost"
+CLIENT_HOST = "ec2-52-9-194-232.us-west-1.compute.amazonaws.com"
 CLIENT_PORT = 3001
 
 # Returns a connection to the Slicer db
